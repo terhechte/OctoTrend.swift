@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import OctoTrend_swift
+@testable import OctoTrend
 
 class OctoTrend_swiftTests: XCTestCase {
     
@@ -22,8 +22,15 @@ class OctoTrend_swiftTests: XCTestCase {
     }
     
     func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        let readyExpectation = expectationWithDescription("got data")
+        trends(language: "swift", timeline: TrendingTimeline.Today) { (result) -> () in
+            print(result)
+            readyExpectation.fulfill()
+        }
+        
+        waitForExpectationsWithTimeout(8, handler: { (e) -> Void in
+            XCTAssertNil(e, "Error")
+        })
     }
     
     func testPerformanceExample() {

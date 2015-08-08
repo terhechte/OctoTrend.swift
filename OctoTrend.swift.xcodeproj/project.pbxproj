@@ -13,6 +13,9 @@
 		4DDD3FAD1B6FAFB000CEF5BC /* OctoTrend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDD3FAC1B6FAFB000CEF5BC /* OctoTrend.swift */; };
 		4DDD3FAE1B6FAFB000CEF5BC /* OctoTrend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDD3FAC1B6FAFB000CEF5BC /* OctoTrend.swift */; };
 		4DDD3FB01B6FB0F500CEF5BC /* Kanna.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDD3FAF1B6FB0F500CEF5BC /* Kanna.framework */; };
+		4DF8993E1B7682B0000A9395 /* Kanna.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDD3FAF1B6FB0F500CEF5BC /* Kanna.framework */; };
+		4DF899401B7682E1000A9395 /* Kanna.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4DDD3FAF1B6FB0F500CEF5BC /* Kanna.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4DF899411B7682E4000A9395 /* OctoTrend.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4DDD3F921B6FAF9700CEF5BC /* OctoTrend.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -24,6 +27,20 @@
 			remoteInfo = OctoTrend.swift;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4DF8993F1B7682D4000A9395 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4DF899411B7682E4000A9395 /* OctoTrend.framework in CopyFiles */,
+				4DF899401B7682E1000A9395 /* Kanna.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4DDD3F921B6FAF9700CEF5BC /* OctoTrend.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OctoTrend.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,6 +67,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4DDD3F9D1B6FAF9700CEF5BC /* OctoTrend.framework in Frameworks */,
+				4DF8993E1B7682B0000A9395 /* Kanna.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +151,7 @@
 				4DDD3F981B6FAF9700CEF5BC /* Sources */,
 				4DDD3F991B6FAF9700CEF5BC /* Frameworks */,
 				4DDD3F9A1B6FAF9700CEF5BC /* Resources */,
+				4DF8993F1B7682D4000A9395 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -361,6 +380,10 @@
 		4DDD3FAA1B6FAF9700CEF5BC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = OctoTrend.swiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.stylemac.OctoTrend-swiftTests";
@@ -371,6 +394,10 @@
 		4DDD3FAB1B6FAF9700CEF5BC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = OctoTrend.swiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.stylemac.OctoTrend-swiftTests";
@@ -397,6 +424,7 @@
 				4DDD3FA81B6FAF9700CEF5BC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4DDD3FA91B6FAF9700CEF5BC /* Build configuration list for PBXNativeTarget "OctoTrend.swiftTests" */ = {
 			isa = XCConfigurationList;
@@ -405,6 +433,7 @@
 				4DDD3FAB1B6FAF9700CEF5BC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
