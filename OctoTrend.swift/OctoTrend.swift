@@ -98,10 +98,10 @@ private func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
         else {return Result(error: ParseError.HTMLSelectorError(selector: "p.repo-list-meta"))}
         
         // Fixme, also need to parse the language from here
+        let components = meta.componentsSeparatedByString(kGithubTrendsMetaSplit)
         let stars: Int?
         do {
-            stars = try meta.componentsSeparatedByString(kGithubTrendsMetaSplit)
-                .optionalItem(1)
+            stars = try components.optionalItem(1)
                 .map { (s: String) throws -> Int? in
                     let range = try NSRegularExpression(pattern: "([0-9]+)", options: [])
                         .rangeOfFirstMatchInString(s, options: [], range: NSMakeRange(0, s.characters.count))
@@ -115,6 +115,9 @@ private func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
         guard let starNumber = stars else {
             return Result(error: ParseError.StarError(message: "Empty Stars Data"))
         }
+        
+        guard let language = components.optionalItem(0)
+            else {return Result(error: ParseError.HTMLSelectorError(selector: "h3.repo-list-meta.language"))}
         
         guard let urlElement = repo.at_css("h3.repo-list-name a")
             else {return Result(error: ParseError.HTMLSelectorError(selector: "h3.repo-list-name a"))}
@@ -135,7 +138,7 @@ private func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
             }
         }
         
-        repos.append(Repository(url: url, name: name, developers: users, language: "", stars: starNumber, text: desc))
+        repos.append(Repository(url: url, name: name, developers: users, language: language, stars: starNumber, text: desc))
     }
     
     return Result(repos)
