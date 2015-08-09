@@ -24,8 +24,13 @@ class OctoTrend_swiftTests: XCTestCase {
     func testExample() {
         let readyExpectation = expectationWithDescription("got data")
         trends(language: "swift", timeline: TrendingTimeline.Today) { (result) -> () in
-            print(result)
-            readyExpectation.fulfill()
+            switch result {
+            case .Failure(let e):
+                XCTAssert(false, e.errorString())
+            case .Success(let s):
+                print("result: \(s)")
+                readyExpectation.fulfill()
+            }
         }
         
         waitForExpectationsWithTimeout(8, handler: { (e) -> Void in
