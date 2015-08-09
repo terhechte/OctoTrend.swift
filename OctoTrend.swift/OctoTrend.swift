@@ -125,14 +125,17 @@ private func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
         guard let url = NSURL(string: urlPath)
             else {return Result(error: ParseError.HTMLSelectorError(selector: "h3.repo-list-name a[href]"))}
         
-        //else {return Result(error: ParseError.HTMLSelectorError(selector: "h3.repo-list-name a"))}
+        var users: [User] = []
+        for user in repo.css("p.repo-list-meta a img") {
+            if let name = user["title"],
+                image = user["src"],
+                imageURL = NSURL(string: image),
+                url = NSURL(string: "http://github.com/\(name)") {
+                    users.append(User(name: name, imageURL: imageURL, url: url))
+            }
+        }
         
-//        var users: [User] = []
-//        for user in repo.css("p.repo-list-meta a img") {
-//            print(user)
-//        }
-        
-        repos.append(Repository(url: url, name: name, developers: [], language: "", stars: starNumber, text: desc))
+        repos.append(Repository(url: url, name: name, developers: users, language: "", stars: starNumber, text: desc))
     }
     
     return Result(repos)
