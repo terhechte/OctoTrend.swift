@@ -76,6 +76,12 @@ extension Optional {
     }
 }
 
+extension String {
+    func trim() -> String {
+        return (self as NSString).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+    }
+}
+
 private func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
     
     guard let doc = Kanna.HTML(html: html, encoding: NSUTF8StringEncoding)
@@ -138,7 +144,7 @@ private func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
             }
         }
         
-        repos.append(Repository(url: url, name: name, developers: users, language: language, stars: starNumber, text: desc))
+        repos.append(Repository(url: url, name: name.trim(), developers: users, language: language.trim(), stars: starNumber, text: desc.trim()))
     }
     
     return Result(repos)

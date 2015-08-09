@@ -33,7 +33,7 @@ class OctoTrend_swiftTests: XCTestCase {
             }
         }
         
-        waitForExpectationsWithTimeout(8, handler: { (e) -> Void in
+        waitForExpectationsWithTimeout(20, handler: { (e) -> Void in
             XCTAssertNil(e, "Error")
         })
     }
