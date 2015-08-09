@@ -16,6 +16,9 @@
 		4DF8993E1B7682B0000A9395 /* Kanna.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDD3FAF1B6FB0F500CEF5BC /* Kanna.framework */; };
 		4DF899401B7682E1000A9395 /* Kanna.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4DDD3FAF1B6FB0F500CEF5BC /* Kanna.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4DF899411B7682E4000A9395 /* OctoTrend.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4DDD3F921B6FAF9700CEF5BC /* OctoTrend.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4DF899431B7743E9000A9395 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DF899421B7743E9000A9395 /* Result.framework */; };
+		4DF899441B7743F3000A9395 /* Result.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4DF899421B7743E9000A9395 /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4DF899451B7743F8000A9395 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DF899421B7743E9000A9395 /* Result.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +40,7 @@
 			files = (
 				4DF899411B7682E4000A9395 /* OctoTrend.framework in CopyFiles */,
 				4DF899401B7682E1000A9395 /* Kanna.framework in CopyFiles */,
+				4DF899441B7743F3000A9395 /* Result.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,6 +55,7 @@
 		4DDD3FA31B6FAF9700CEF5BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4DDD3FAC1B6FAFB000CEF5BC /* OctoTrend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OctoTrend.swift; sourceTree = "<group>"; };
 		4DDD3FAF1B6FB0F500CEF5BC /* Kanna.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kanna.framework; path = Carthage/Build/iOS/Kanna.framework; sourceTree = "<group>"; };
+		4DF899421B7743E9000A9395 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +64,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4DDD3FB01B6FB0F500CEF5BC /* Kanna.framework in Frameworks */,
+				4DF899431B7743E9000A9395 /* Result.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,6 +74,7 @@
 			files = (
 				4DDD3F9D1B6FAF9700CEF5BC /* OctoTrend.framework in Frameworks */,
 				4DF8993E1B7682B0000A9395 /* Kanna.framework in Frameworks */,
+				4DF899451B7743F8000A9395 /* Result.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +84,7 @@
 		4DDD3F881B6FAF9700CEF5BC = {
 			isa = PBXGroup;
 			children = (
+				4DF899421B7743E9000A9395 /* Result.framework */,
 				4DDD3FAF1B6FB0F500CEF5BC /* Kanna.framework */,
 				4DDD3F941B6FAF9700CEF5BC /* OctoTrend.swift */,
 				4DDD3FA01B6FAF9700CEF5BC /* OctoTrend.swiftTests */,
