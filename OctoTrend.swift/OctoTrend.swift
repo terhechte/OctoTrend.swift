@@ -19,20 +19,13 @@ struct User {
     let url: NSURL
 }
 
-enum Stars {
-    case Day(count: Int)
-    case Week(count: Int)
-    case Month(count: Int)
-}
-
 struct Repository {
     let url: NSURL
     let name: String
     let developers: [User]
     let language: String
-    let stars: Stars
+    let stars: Int
     let text: String
-    let starred: Bool
 }
 
 enum TrendingTimeline : String {
@@ -43,7 +36,7 @@ enum TrendingTimeline : String {
 
 enum ParseError : ErrorType {
     case URLError
-    case NetworkError
+    case NetworkError(message: String)
     case HTMLParseError
     case HTMLSelectorError(selector: String)
     case StarError(message: String)
@@ -52,14 +45,14 @@ enum ParseError : ErrorType {
         switch self {
         case .URLError:
             return "URLError"
-        case .NetworkError:
-            return "NetworkError"
+        case .NetworkError(let e):
+            return "NetworkError: \(e)"
         case .HTMLParseError:
             return "HTMLParseError"
         case .HTMLSelectorError(let s):
-            return s
+            return "HTMLSelectorError: \(s)"
         case .StarError(let m):
-            return m
+            return "StarError: \(m)"
         }
     }
 }
@@ -119,6 +112,7 @@ private func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
         guard let meta = repo.css("p.repo-list-meta").text
         else {return Result(error: ParseError.HTMLSelectorError(selector: "p.repo-list-meta"))}
         
+        // Fixme, also need to parse the language from here
         let stars: Int?
         do {
             stars = try meta.componentsSeparatedByString(kGithubTrendsMetaSplit)
@@ -134,39 +128,45 @@ private func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
         }
         
         guard let starNumber = stars else {
-            return Result(error: ParseError.HTMLSelectorError(selector: "p.repo-list-description"))
+            return Result(error: ParseError.StarError(message: "Empty Stars Data"))
         }
         
-        var users: [User] = []
-        for user in repo.css("p.repo-list-meta a img") {
-            print(user)
-        }
+        guard let urlElement = repo.at_css("h3.repo-list-name a")
+            else {return Result(error: ParseError.HTMLSelectorError(selector: "h3.repo-list-name a"))}
         
+        guard let urlPath = urlElement["href"]
+            else {return Result(error: ParseError.HTMLSelectorError(selector: "h3.repo-list-name a[href]"))}
+        
+        guard let url = NSURL(string: urlPath)
+            else {return Result(error: ParseError.HTMLSelectorError(selector: "h3.repo-list-name a[href]"))}
+        
+        //else {return Result(error: ParseError.HTMLSelectorError(selector: "h3.repo-list-name a"))}
+        
+//        var users: [User] = []
+//        for user in repo.css("p.repo-list-meta a img") {
+//            print(user)
+//        }
+        
+        repos.append(Repository(url: url, name: name, developers: [], language: "", stars: starNumber, text: desc))
     }
     
-    return Result(error: ParseError.URLError)
+    return Result(repos)
 }
 
 func trends(language language: String, timeline: TrendingTimeline,
-    completion: (result: [Repository]?) -> ()) {
+    completion: (result: Result<[Repository], ParseError>) -> ()) {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) { () -> Void in
         guard let url = NSURL(string: String(format: kGithubTrendsURLTemplate, language, timeline.rawValue))
-            else { completion(result: nil); return }
+            else { completion(result: Result(error: ParseError.URLError)); return}
         let request = NSURLRequest(URL: url)
         
         do {
             let data = try NSURLConnection.sendSynchronousRequest(request, returningResponse: nil)
             
             let result = parseTrendsHTML(data)
-            switch result {
-            case .Failure(let e):
-                print (e.errorString())
-            case .Success(let s):
-                print("result: \(s)")
-            }
-            completion(result: nil)
-        } catch _ {
-            completion(result: nil)
+            completion(result: result)
+        } catch let e {
+            completion(result: Result(error: ParseError.NetworkError(message: "\(e)")))
         }
     }
 }
