@@ -8,6 +8,7 @@
 
 import Foundation
 import Kanna
+import Result
 
 let kGithubTrendsURLTemplate = "https://github.com/trending?l=%@&since=%@"
 let kGithubTrendsMetaSplit = "•"
@@ -40,43 +41,110 @@ enum TrendingTimeline : String {
     case Month = "monthly"
 }
 
-private func parseTrendsHTML(html: NSData) -> [Repository]? {
-    guard let doc = Kanna.HTML(html: html, encoding: NSUTF8StringEncoding) else { return nil }
+enum ParseError : ErrorType {
+    case URLError
+    case NetworkError
+    case HTMLParseError
+    case HTMLSelectorError(selector: String)
+    case StarError(message: String)
+    
+    func errorString() -> String {
+        switch self {
+        case .URLError:
+            return "URLError"
+        case .NetworkError:
+            return "NetworkError"
+        case .HTMLParseError:
+            return "HTMLParseError"
+        case .HTMLSelectorError(let s):
+            return s
+        case .StarError(let m):
+            return m
+        }
+    }
+}
+
+extension Array {
+    func optionalItem(index: Int) -> Array.Generator.Element? {
+        if index > self.count {
+            return nil
+        }
+        return self[index]
+    }
+    func map<T>(@noescape transform: (Generator.Element) throws -> T) rethrows -> [T] {
+        var result: [T] = []
+        for x in self {
+            result.append(try transform(x))
+        }
+        return result
+    }
+}
+
+extension Optional {
+    func map<U>(@noescape f: (T) throws -> U) rethrows -> U? {
+        if let t = self {
+            return try f(t)
+        } else {
+            return nil
+        }
+    }
+}
+
+func unthrow<T>(f: () throws -> T) -> T? {
+    do {
+        return try f()
+    } catch _ {
+        return nil
+    }
+}
+
+private func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
+    
+    guard let doc = Kanna.HTML(html: html, encoding: NSUTF8StringEncoding)
+        else {return Result(error: ParseError.HTMLParseError)}
     
     // FIXME: Move things from here into separate functions to have a cleaner implementation
     var repos: [Repository] = []
     for repo in doc.css("li.repo-list-item") {
-        if let name = repo.css("h3.repo-list-name").text,
-            desc = repo.css("p.repo-list-description").text,
-            meta = repo.css("p.repo-list-meta").text {
-                let metaComponents = meta.componentsSeparatedByString(kGithubTrendsMetaSplit)
-                if metaComponents.count != 3 { continue }
-                do {
-                    // This is impressively awful
-                    let starString = metaComponents[1]
-                    let exp = try NSRegularExpression(pattern: "[0-9]*", options: [])
-                    let matches = exp.matchesInString(starString, options: [], range: NSMakeRange(0, starString.characters.count))
-                    guard let match = matches.first else { continue }
-                    let range = match.range
-                    let stars = (starString as NSString).substringWithRange(range)
-                    guard let starNumber = Int(stars) else { continue }
-                    
-                    print("starnumber:", starNumber)
-                    
-                    var users: [User] = []
-                    for user in repo.css("p.repo-list-meta a img") {
-                        print(user)
-                    }
-                } catch _ {
-                    continue
+        
+        // Fetch the various properties from the html
+        // FIXME: Abstract this away
+        guard let name = repo.css("h3.repo-list-name").text
+        else {return Result(error: ParseError.HTMLSelectorError(selector: "h3.repo-list-name"))}
+        
+        guard let desc = repo.css("p.repo-list-description").text
+        else {return Result(error: ParseError.HTMLSelectorError(selector: "p.repo-list-description"))}
+        
+        
+        guard let meta = repo.css("p.repo-list-meta").text
+        else {return Result(error: ParseError.HTMLSelectorError(selector: "p.repo-list-meta"))}
+        
+        let stars: Int?
+        do {
+            stars = try meta.componentsSeparatedByString(kGithubTrendsMetaSplit)
+                .optionalItem(1)
+                .map { (s: String) throws -> Int? in
+                    let range = try NSRegularExpression(pattern: "([0-9]+)", options: [])
+                        .rangeOfFirstMatchInString(s, options: [], range: NSMakeRange(0, s.characters.count))
+                    return Int((s as NSString).substringWithRange(range))
                 }
-                let stars = metaComponents[1]
-                
-                print("\(name) - \(desc)")
+                .flatMap({$0})
+        } catch let e {
+            return Result(error: ParseError.StarError(message: "\(e)"))
         }
+        
+        guard let starNumber = stars else {
+            return Result(error: ParseError.HTMLSelectorError(selector: "p.repo-list-description"))
+        }
+        
+        var users: [User] = []
+        for user in repo.css("p.repo-list-meta a img") {
+            print(user)
+        }
+        
     }
     
-    return []
+    return Result(error: ParseError.URLError)
 }
 
 func trends(language language: String, timeline: TrendingTimeline,
@@ -89,7 +157,14 @@ func trends(language language: String, timeline: TrendingTimeline,
         do {
             let data = try NSURLConnection.sendSynchronousRequest(request, returningResponse: nil)
             
-            completion(result: parseTrendsHTML(data))
+            let result = parseTrendsHTML(data)
+            switch result {
+            case .Failure(let e):
+                print (e.errorString())
+            case .Success(let s):
+                print("result: \(s)")
+            }
+            completion(result: nil)
         } catch _ {
             completion(result: nil)
         }
