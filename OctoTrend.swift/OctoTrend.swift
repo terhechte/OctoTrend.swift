@@ -64,13 +64,6 @@ extension Array {
         }
         return self[index]
     }
-    func map<T>(@noescape transform: (Generator.Element) throws -> T) rethrows -> [T] {
-        var result: [T] = []
-        for x in self {
-            result.append(try transform(x))
-        }
-        return result
-    }
 }
 
 extension Optional {
@@ -80,14 +73,6 @@ extension Optional {
         } else {
             return nil
         }
-    }
-}
-
-func unthrow<T>(f: () throws -> T) -> T? {
-    do {
-        return try f()
-    } catch _ {
-        return nil
     }
 }
 
