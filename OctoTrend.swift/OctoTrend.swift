@@ -80,6 +80,17 @@ extension String {
     func trim() -> String {
         return (self as NSString).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
     }
+    
+    func removeWhitespace() -> String {
+        // not only trim but remove every whitespace char from inside the string too
+        return String(self.characters.filter({ (e: Character) -> Bool in
+            if e == Character(" ") || e == Character("\n") {
+                return false
+            } else {
+                return true
+            }
+        }))
+    }
 }
 
 private func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
@@ -98,7 +109,6 @@ private func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
         
         guard let desc = repo.css("p.repo-list-description").text
         else {return Result(error: ParseError.HTMLSelectorError(selector: "p.repo-list-description"))}
-        
         
         guard let meta = repo.css("p.repo-list-meta").text
         else {return Result(error: ParseError.HTMLSelectorError(selector: "p.repo-list-meta"))}
@@ -144,7 +154,7 @@ private func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
             }
         }
         
-        repos.append(Repository(url: url, name: name.trim(), developers: users, language: language.trim(), stars: starNumber, text: desc.trim()))
+        repos.append(Repository(url: url, name: name.removeWhitespace(), developers: users, language: language.trim(), stars: starNumber, text: desc.trim()))
     }
     
     return Result(repos)
