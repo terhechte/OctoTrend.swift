@@ -59,7 +59,7 @@ class OctoTrend_swiftTests: XCTestCase {
                     XCTAssertEqual(firstRepo.stars, 173, "Did not parse stars correctly")
                     XCTAssertEqual(firstRepo.text, "The Big List of Naughty Strings is a list of strings which have a high probability of causing issues when used as user-input data. This is a keyboard to help you test your app from your iOS device.", "Did not parse text correctly")
                     guard let lastRepo = s.last else { XCTAssert(false, "No Items"); return }
-                    XCTAssertEqual(lastRepo.url, "/remaerd/Keys", "Did not parse url correctly")
+                    XCTAssertEqual(lastRepo.url.absoluteString, "https://github.com/remaerd/Keys", "Did not parse url correctly")
                     // The last repo has no "builders" listed, so it should correctly return the empty array here...
                     XCTAssertEqual(lastRepo.developers.count, 0, "Did not parse developer count correctly")
                     

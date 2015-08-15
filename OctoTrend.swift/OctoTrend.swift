@@ -141,7 +141,7 @@ func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
         guard let urlPath = urlElement["href"]
             else {return Result(error: ParseError.HTMLSelectorError(selector: "h3.repo-list-name a[href]"))}
         
-        guard let url = NSURL(string: urlPath)
+        guard let url = NSURL(string: "https://github.com\(urlPath)")
             else {return Result(error: ParseError.HTMLSelectorError(selector: "h3.repo-list-name a[href]"))}
         
         var users: [User] = []
@@ -149,7 +149,7 @@ func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
             if let name = user["title"],
                 image = user["src"],
                 imageURL = NSURL(string: image),
-                url = NSURL(string: "http://github.com/\(name)") {
+                url = NSURL(string: "https://github.com/\(name)") {
                     users.append(User(name: name, imageURL: imageURL, url: url))
             }
         }
