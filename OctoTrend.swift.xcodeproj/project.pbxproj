@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4DDB59F71B7F7D3300C9CC45 /* trending.html in Resources */ = {isa = PBXBuildFile; fileRef = 4DDB59F61B7F7D3300C9CC45 /* trending.html */; };
 		4DDD3F961B6FAF9700CEF5BC /* OctoTrend.swift.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DDD3F951B6FAF9700CEF5BC /* OctoTrend.swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4DDD3F9D1B6FAF9700CEF5BC /* OctoTrend.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDD3F921B6FAF9700CEF5BC /* OctoTrend.framework */; };
 		4DDD3FA21B6FAF9700CEF5BC /* OctoTrend_swiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDD3FA11B6FAF9700CEF5BC /* OctoTrend_swiftTests.swift */; };
@@ -47,6 +48,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4DDB59F61B7F7D3300C9CC45 /* trending.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = trending.html; sourceTree = "<group>"; };
 		4DDD3F921B6FAF9700CEF5BC /* OctoTrend.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OctoTrend.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DDD3F951B6FAF9700CEF5BC /* OctoTrend.swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OctoTrend.swift.h; sourceTree = "<group>"; };
 		4DDD3F971B6FAF9700CEF5BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 		4DDD3FA01B6FAF9700CEF5BC /* OctoTrend.swiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				4DDB59F61B7F7D3300C9CC45 /* trending.html */,
 				4DDD3FA11B6FAF9700CEF5BC /* OctoTrend_swiftTests.swift */,
 				4DDD3FA31B6FAF9700CEF5BC /* Info.plist */,
 			);
@@ -219,6 +222,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4DDB59F71B7F7D3300C9CC45 /* trending.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

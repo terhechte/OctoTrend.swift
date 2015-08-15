@@ -13,13 +13,13 @@ import Result
 let kGithubTrendsURLTemplate = "https://github.com/trending?l=%@&since=%@"
 let kGithubTrendsMetaSplit = "•"
 
-struct User {
+public struct User {
     let name: String
     let imageURL: NSURL
     let url: NSURL
 }
 
-struct Repository {
+public struct Repository {
     let url: NSURL
     let name: String
     let developers: [User]
@@ -28,13 +28,13 @@ struct Repository {
     let text: String
 }
 
-enum TrendingTimeline : String {
+public enum TrendingTimeline : String {
     case Today = "daily"
     case Week = "weekly"
     case Month = "monthly"
 }
 
-enum ParseError : ErrorType {
+public enum ParseError : ErrorType {
     case URLError
     case NetworkError(message: String)
     case HTMLParseError
@@ -57,7 +57,7 @@ enum ParseError : ErrorType {
     }
 }
 
-extension Array {
+private extension Array {
     func optionalItem(index: Int) -> Array.Generator.Element? {
         if index > self.count {
             return nil
@@ -66,7 +66,7 @@ extension Array {
     }
 }
 
-extension Optional {
+private extension Optional {
     func map<U>(@noescape f: (T) throws -> U) rethrows -> U? {
         if let t = self {
             return try f(t)
@@ -76,7 +76,7 @@ extension Optional {
     }
 }
 
-extension String {
+private extension String {
     func trim() -> String {
         return (self as NSString).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
     }
@@ -93,7 +93,7 @@ extension String {
     }
 }
 
-private func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
+func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
     
     guard let doc = Kanna.HTML(html: html, encoding: NSUTF8StringEncoding)
         else {return Result(error: ParseError.HTMLParseError)}
@@ -160,7 +160,7 @@ private func parseTrendsHTML(html: NSData) -> Result<[Repository], ParseError> {
     return Result(repos)
 }
 
-func trends(language language: String, timeline: TrendingTimeline,
+public func trends(language language: String, timeline: TrendingTimeline,
     completion: (result: Result<[Repository], ParseError>) -> ()) {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) { () -> Void in
         guard let url = NSURL(string: String(format: kGithubTrendsURLTemplate, language, timeline.rawValue))
